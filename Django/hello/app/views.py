@@ -6,11 +6,18 @@ from django.http import HttpResponse
 def index (request):
   return HttpResponse("<h1 style=\"color: blue;\">Hello, World!</h1>")
 
-def pragat (request):
-  return HttpResponse("Hello, Pragat!")
+# Well following three functions allows us to greet three different persons 
+# How about greeting 300 people ?? :: There's no point in defining 300 more views
+#
+#def pragat (request):
+#  return HttpResponse("Hello, Pragat!")
+#def brian (request):
+#  return HttpResponse("Hello, Brian!")
+#def david (request):
+#  return HttpResponse("Hello, David!")
+#
+#
 
-def brian (request):
-  return HttpResponse("Hello, Brian!")
-
-def david (request):
-  return HttpResponse("Hello, David!")
+# TO GET THE TASK DONE Let's create a new view which will use a url as it's parameter
+def greet (request, name):
+  return HttpResponse(f"Hello, {name.capitalize()}!")
