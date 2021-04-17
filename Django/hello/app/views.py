@@ -21,5 +21,5 @@ def index (request):
 # TO GET THE TASK DONE Let's create a new view which will use a url as it's parameter
 def greet (request, name):
   return render (request, "hello/greet.html", {
-    "name" : name.capitalize()
+    "name" : name.capitalize() # This third argument to render function is known as CONTEXT DICT
   })
