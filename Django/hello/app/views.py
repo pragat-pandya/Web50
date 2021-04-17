@@ -4,7 +4,7 @@ from django.http import HttpResponse
 # Create your views here.
 
 def index (request):
-  return HttpResponse("<h1 style=\"color: blue;\">Hello, World!</h1>")
+  return render (request, "hello/index.html")
 
 # Well following three functions allows us to greet three different persons 
 # How about greeting 300 people ?? :: There's no point in defining 300 more views
