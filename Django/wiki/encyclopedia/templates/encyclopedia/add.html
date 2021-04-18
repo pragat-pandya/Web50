@@ -1,0 +1,20 @@
+{% extends "encyclopedia/layout.html" %}
+{% load static %}
+    {% block title %} Add article {% endblock %}
+    {% block body %}
+        {% if error %}
+        <h3>OOOoops!!!! There is already an article under "{{title}}".</h3>
+        {% else %}
+        <br><br>
+        <h3> Fill out following form in order to add new article:</h3>
+        <form class="form" action="{% url 'wiki_add' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {{form.as_table}}
+            </div>
+            <div class="form-group">
+                <input class="btn btn-primary align-center" type="submit" value="ADD ARTICLE">
+            </div>
+        </form>
+        {% endif %}
+    {% endblock %}

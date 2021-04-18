@@ -1,0 +1,16 @@
+{% extends "encyclopedia/layout.html" %}
+{% load static %}
+    {% block title %} Add article {% endblock %}
+    {% block body %}
+        <br><br>
+        <h3> Edit the article on {{heading}} in the following textarea:</h3>
+        <form class="form" action="{% url 'edit' title=heading %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {{form.as_table}}
+            </div>
+            <div class="form-group">
+                <input class="btn btn-primary align-center" type="submit" value="SAVE CHANGES">
+            </div>
+        </form>
+    {% endblock %}
