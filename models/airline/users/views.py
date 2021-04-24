@@ -6,7 +6,7 @@ from django.urls import reverse
 def index (request):
   # if no user is signed in then return login page
   if not request.user.is_authenticated:
-    return HttpResponseRediretct (reverse("login"))
+    return HttpResponseRedirect (reverse("login"))
   return render (request, "users/user.html")
 
 def login_view (request):
