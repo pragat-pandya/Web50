@@ -71,7 +71,7 @@ def register(request):
 
 
 # Add new listing to the app
-#@login_required(login_url='/login', redirect_field_name='index')
+@login_required(login_url='/login', redirect_field_name='index')
 def add_listing (request):
     # Create an instace of ListingForm to pass to the template!
     new = ListingForm()
