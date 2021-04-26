@@ -5,12 +5,16 @@ from django.shortcuts import render
 from django.urls import reverse
 from .models import User, Listing
 from .forms import ListingForm 
+from django.contrib.auth.decorators import login_required
 
 
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    listings = Listing.objects.all()
+    return render(request, "auctions/index.html", {
+        "message" : list(listings)
+    })
 
 
 def login_view(request):
@@ -65,7 +69,9 @@ def register(request):
         return render(request, "auctions/register.html")
 
 
+
 # Add new listing to the app
+#@login_required(login_url='/login', redirect_field_name='index')
 def add_listing (request):
     # Create an instace of ListingForm to pass to the template!
     new = ListingForm()

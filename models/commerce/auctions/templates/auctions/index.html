@@ -2,6 +2,33 @@
 
 {% block body %}
     <h2>Active Listings</h2>
-
-    TODO
+    
+    <div class="container">
+        {% for m in message %}
+        <div class="d-inline-flex bd-highlight m-4 flex-row">
+            <div class="card" style="width: 18rem;">
+                <img class="card-image-top" style="width: 200px; height: 200px; overflow: hidden;" src="{{m.img}}" alt="No image for this product is made available by the seller.">
+                <div class="card-body">
+                    <h5 class="card-title">{{m.title}}</h5>
+                    <p class="card-text">{{m.description}}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Initial bid: {{m.bid_init}}$</li>
+                    {% if m.curr_price == None %}
+                        <li class="list-group-item">Current Price: {{m.bid_init}}$</li>
+                    {% else %}
+                        <li class="list-group-item">Current Price: {{m.curr_price}}$</li>
+                    {% endif %}
+                </ul>
+                <div class="card-body">
+                    <a href="" class="card-link">Place a BID</a>
+                </div>
+            </div>
+        </div>
+        
+        {% endfor %}
+    </div>
+            
+            
+    
 {% endblock %}
