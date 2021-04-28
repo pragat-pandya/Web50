@@ -1,3 +1,12 @@
 body {
     padding: 10px;
 }
+
+#card-links:hover {
+    background-color: #00B74A;
+}
+
+#listing-page-image {
+    max-width: 100%;
+    height: auto;
+}

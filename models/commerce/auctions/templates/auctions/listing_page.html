@@ -1,0 +1,22 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div class="container">
+  <h1>{{title}}</h1>
+  <div class="row content-justify-center text-center m-5 p-2">
+    <img class="img-fluid" src="{{image}}" alt="No image is available for this listing" id="listing-page-image">
+  </div>
+  <div class="p-1 m-4" id="curr_price">
+    {% if price != None %}
+      <h2>Current Price: ${{price}}</h2>
+    {% else %}
+      <h2>Current Price: ${{initial_bid}}</h2>
+    {% endif %}
+    </div>
+
+  <div id="description" class="p-4 mt-4">
+    <h2>Description</h2>
+    <p>{{description}}</p>
+  </div>
+</div>
+{% endblock %}

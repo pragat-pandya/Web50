@@ -69,6 +69,16 @@ def register(request):
         return render(request, "auctions/register.html")
 
 
+def listing_page (request, listing_title):
+    obj = Listing.objects.filter(title=listing_title)
+    return render (request, "auctions/listing_page.html", {
+        "title" : listing_title,
+        "image" : obj[0].img,
+        "price" : obj[0].curr_price,
+        "description" : obj[0].description,
+        "initial_bid" : obj[0].bid_init, 
+    })
+
 
 # Add new listing to the app
 @login_required(login_url='/login', redirect_field_name='index')

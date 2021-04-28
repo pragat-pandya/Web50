@@ -10,9 +10,13 @@ class Listing(models.Model):
     bid_init = models.IntegerField(null=False)
     img = models.URLField(null=True)
     curr_price = models.IntegerField(blank=True)
+
+    def get (self,arg):
+        return self.arg
     
     def __str__ (self):
         return f"{self.id} : {self.title} : {self.description} : {self.bid_init} : {self.img}"
+
 
 class User(AbstractUser):
     id = models.AutoField(primary_key=True)
