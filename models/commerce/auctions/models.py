@@ -21,3 +21,19 @@ class Listing(models.Model):
 class User(AbstractUser):
     id = models.AutoField(primary_key=True)
     listings = models.ManyToManyField(Listing, blank=True, related_name="user_listings")
+
+
+class bids (models.Model):
+    bID = models.AutoField(primary_key=True)
+    lid = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="bids")
+    bid_amount = models.IntegerField(null=False)
+
+class comments (models.Model):
+    cid = models.AutoField(primary_key=True)
+    lid = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="comments")
+    cbody = models.CharField(max_length=100, null=False)
+
+class watchlist (models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.CharField(max_length=100)
+    item = models.ManyToManyField (Listing, related_name="listing")
