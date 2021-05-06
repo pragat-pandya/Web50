@@ -6,3 +6,4 @@ class ListingForm(forms.Form):
   description = forms.CharField(label="Description", widget=forms.Textarea(attrs={'class':'form-control'}), max_length=500)
   initial_bid = forms.IntegerField (label="Initial Bid($)", widget=forms.TextInput(attrs={'class': 'form-control'}))
   img_url = forms.URLField(label="Link to an image of the product", max_length=500, required=False, widget=forms.TextInput(attrs={'class':'form-control'}))
+  ownr = forms.CharField(label="Username", widget=forms.TextInput(attrs={'class':'form-control'}))

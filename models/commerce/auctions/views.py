@@ -83,10 +83,7 @@ def listing_page (request, listing_title):
 # Add new listing to the app
 @login_required(login_url='/login', redirect_field_name='index')
 def add_listing (request):
-    # Create an instace of ListingForm to pass to the template!
-    new = ListingForm()
-    if request.method == "POST":
-        
+    if request.method == "POST":   
         # Store post request data into a ListingForm type object
         new_listing = ListingForm (request.POST)
         
@@ -98,17 +95,19 @@ def add_listing (request):
             listing.description = new_listing.cleaned_data["description"]
             listing.bid_init = new_listing.cleaned_data["initial_bid"]
             listing.img = new_listing.cleaned_data["img_url"]
-            # Append this record to the db.
+            listing.curr_price = listing.bid_init
+            listing.owner = User.objects.get(username=new_listing.cleaned_data["ownr"])
+            # Append this record to the Listing table.
             listing.save()
             return HttpResponseRedirect(reverse("index"))
         else:
             # If the form is not valid then redirect to add_listing.html with invalid message.
             render (request, "auctions/add_listing.html", {
                 "message" : "The data submitted is not valid!",
-                "form" : new
+                "form" : ListingForm()
             })
     
     return render(request, "auctions/add_listing.html", {
         "message": None,
-        "form" : new
+        "form" : ListingForm()
     })
