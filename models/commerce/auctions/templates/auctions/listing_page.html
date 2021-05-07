@@ -6,6 +6,26 @@
   <div class="row content-justify-center text-center m-5 p-2">
     <img class="img-fluid" src="{{image}}" alt="No image is available for this listing" id="listing-page-image">
   </div>
+
+  {% if user.is_authenticated %}
+  <div>
+    {% if flag %}
+      <form action="{% url 'unwatch' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="title" value="{{title}}">
+        <input class="btn btn-outline-danger" type="submit" value="unwatch">
+      </form>
+    {% else %}
+      <form action="{% url 'watch' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="title" value="{{title}}">
+        <input class="btn btn-outline-success" type="submit" value="watch">
+      </form>
+    {% endif %}  
+  </div>
+  {% endif %}
+  
+  
   <div class="p-1 m-4" id="curr_price">
     {% if price != None %}
       <h2>Current Price: ${{price}}</h2>

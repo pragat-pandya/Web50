@@ -27,3 +27,12 @@ class Listing(models.Model):
     def __str__ (self):
         return f"{self.id} : {self.title} : {self.description} : {self.bid_init} : {self.img}"
 
+class Watchlist (models.Model):
+    id = models.AutoField(primary_key=True)
+    # The listing which is being watched
+    item = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="watching")
+    # The user who's watching this listing
+    usr = models.ForeignKey(User, on_delete=models.CASCADE, related_name="watcher")
+
+    def __str__ (self):
+        return f"{self.item} : {self.usr}"

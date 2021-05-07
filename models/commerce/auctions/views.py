@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from .models import User, Listing
+from .models import *
 from .forms import ListingForm 
 from django.contrib.auth.decorators import login_required
 
@@ -70,13 +70,16 @@ def register(request):
 
 
 def listing_page (request, listing_title):
-    obj = Listing.objects.filter(title=listing_title)
+    obj = Listing.objects.get(title=listing_title)
+    flag = request.user.watcher.filter(item=obj).exists()
     return render (request, "auctions/listing_page.html", {
+        "flag" : flag,
+        "listing" : obj,
         "title" : listing_title,
-        "image" : obj[0].img,
-        "price" : obj[0].curr_price,
-        "description" : obj[0].description,
-        "initial_bid" : obj[0].bid_init, 
+        "image" : obj.img,
+        "price" : obj.curr_price,
+        "description" : obj.description,
+        "initial_bid" : obj.bid_init, 
     })
 
 
@@ -110,4 +113,32 @@ def add_listing (request):
     return render(request, "auctions/add_listing.html", {
         "message": None,
         "form" : ListingForm()
+    })
+
+@login_required(login_url='/login', redirect_field_name='index')
+def watch (request):
+    if request.method == "POST":
+        # Create a new object of wl containing current user and choosed listing item.
+        wl = Watchlist(item=Listing.objects.get(title=request.POST["title"]), usr=request.user)
+        # Save it to the database.
+        wl.save()
+        # Redirect the user to that same listing page.
+        return HttpResponseRedirect(reverse("listing_page", kwargs={'listing_title': request.POST["title"]}))
+    # On get request go to index.
+    return render(request, "auctions/index.html", {
+        "message" : list(Listings.objects.all())
+    })
+
+@login_required(login_url='/login', redirect_field_name='index')
+def unwatch (request):
+    if request.method == "POST":
+        # Get the watchlist object from the database.
+        wl = Watchlist.objects.get(item=Listing.objects.get(title=request.POST["title"]), usr=request.user)
+        # Delete this record from database.
+        wl.delete()
+        # Redirect the user to the same listing page.
+        return HttpResponseRedirect(reverse("listing_page", kwargs={'listing_title': request.POST["title"]}))
+    # On get request go to index
+    return render (request, "auctions/index.html", {
+        "message" : list(Listings.objects.all())
     })
