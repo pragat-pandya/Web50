@@ -7,7 +7,7 @@
         {% for m in message %}
         <a href="{% url 'listing_page' m.title %}">
             <div class="d-inline-flex bd-highlight m-4 flex-row">
-                <div class="card" style="width: 18rem;">
+                <div class="card" style="width: 18rem;">        
                     <img class="card-image-top" style="width: 200px; height: 200px; overflow: auto;" src="{{m.img}}" alt="No image for this product is made available by the seller.">
                     <div class="card-body">
                         <h5 class="card-title">{{m.title}}</h5>

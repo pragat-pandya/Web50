@@ -11,4 +11,5 @@ urlpatterns = [
     path ("listing_page/<str:listing_title>", views.listing_page, name="listing_page"),
     path ("watch", views.watch, name="watch"),
     path ("unwatch", views.unwatch, name="unwatch"),
+    path ("watchlist", views.watchlist, name="watchlist"),
 ]

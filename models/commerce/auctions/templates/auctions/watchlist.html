@@ -1,0 +1,35 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+  <div class="container">
+    {% if not flag %}
+      <h2>Sorry, There're no listings in your watchlist.</h2>
+      <p><a href="{% url 'index' %}">Go to active listings.</a></p>
+    {% else %}
+      {% for m in message %}
+        <a href="{% url 'listing_page' m.item.title %}">
+        <div class="d-inline-flex bd-highlight m-4 flex-row">
+            <div class="card" style="width: 18rem;">
+                <img class="card-image-top" style="width: 200px; height: 200px; overflow: auto;" src="{{m.item.img}}" alt="No image for this product is made available by the seller.">
+                <div class="card-body">
+                    <h5 class="card-title">{{m.item.title}}</h5>
+                    <p class="card-text">{{m.item.description}}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Initial bid: {{m.item.bid_init}}$</li>
+                    {% if m.curr_price == None %}
+                        <li class="list-group-item">Current Price: {{m.item.bid_init}}$</li>
+                    {% else %}
+                        <li class="list-group-item">Current Price: {{m.item.curr_price}}$</li>
+                    {% endif %}
+                </ul>
+                <div class="card-body  text-center bg-light" id="card-links">
+                    <a href="" class="card-link" >Place a BID</a>
+                </div>
+            </div>
+        </div>
+        </a>
+      {% endfor %}
+    {% endif %}
+  </div>
+{% endblock %}

@@ -142,3 +142,18 @@ def unwatch (request):
     return render (request, "auctions/index.html", {
         "message" : list(Listings.objects.all())
     })
+
+
+@login_required(login_url='/login', redirect_field_name='index')
+def watchlist (request):
+    listings = Watchlist.objects.filter(usr = request.user)
+    if listings.exists():
+        items = listings
+        return render(request, "auctions/watchlist.html", {
+            "message" : items,
+            "flag" : True,
+        })
+    else:
+        return render(request, "auctions/watchlist.html", {
+            "flag" : False
+        })    
