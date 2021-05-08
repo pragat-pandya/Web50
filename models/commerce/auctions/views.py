@@ -71,7 +71,11 @@ def register(request):
 
 def listing_page (request, listing_title):
     obj = Listing.objects.get(title=listing_title)
-    flag = request.user.watcher.filter(item=obj).exists()
+    try:
+        flag = request.user.watcher.filter(item=obj).exists()
+    except AttributeError:
+        flag = False
+    bids = obj.bids.all()
     return render (request, "auctions/listing_page.html", {
         "flag" : flag,
         "listing" : obj,
@@ -79,7 +83,9 @@ def listing_page (request, listing_title):
         "image" : obj.img,
         "price" : obj.curr_price,
         "description" : obj.description,
-        "initial_bid" : obj.bid_init, 
+        "initial_bid" : obj.bid_init,
+        "bid_validity" : True,
+        "prev_bids" : obj.bids.all().exists(), 
     })
 
 
@@ -157,3 +163,49 @@ def watchlist (request):
         return render(request, "auctions/watchlist.html", {
             "flag" : False
         })    
+
+@login_required(login_url='/login', redirect_field_name='index')
+def make_a_bid (request):
+    # If its a post request it is a bid makking scenario
+    if request.method == "POST":
+        # Get the listing object in question of bid
+        l = Listing.objects.get(title=request.POST["title"])
+        # Check if the bid is valid 
+        if int(request.POST["bid_amount"]) > l.curr_price:
+            l.curr_price = int(request.POST["bid_amount"])
+            # Make these changes to table row
+            l.save()
+            # Populate a Bid object!
+            b = Bid()
+            b.item = l
+            b.amount = request.POST["bid_amount"]
+            b.usr = request.user
+            # Save this new bid 
+            b.save()
+            flag = request.user.watcher.filter(item=l).exists()
+            return render (request, "auctions/listing_page.html", {
+                "flag" : flag,
+                "listing" : l,
+                "title" : l.title,
+                "image" : l.img,
+                "price" : l.curr_price,
+                "description" : l.description,
+                "initial_bid" : l.bid_init,
+                "bid_validity" : True,
+                "prev_bids" : l.bids.all().exists(),
+                "bids" : l.bids.all(),
+            })
+        else:
+            flag = request.user.watcher.filter(item=l).exists()
+            return render (request, "auctions/listing_page.html", {
+                "flag" : flag,
+                "listing" : l,
+                "title" : l.title,
+                "image" : l.img,
+                "price" : l.curr_price,
+                "description" : l.description,
+                "initial_bid" : l.bid_init,
+                "bid_validity" : False,
+                "prev_bids" : l.bids.all().exists(),
+                "bids" :  l.bids.all()
+            })

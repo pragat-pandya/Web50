@@ -25,12 +25,44 @@
   </div>
   {% endif %}
   
+  <div class="p-1 m-4" id="curr_price">
+      <h2>Initial Bid: ${{initial_bid}}</h2>
+  </div>
+
   
   <div class="p-1 m-4" id="curr_price">
     {% if price != None %}
       <h2>Current Price: ${{price}}</h2>
     {% else %}
       <h2>Current Price: ${{initial_bid}}</h2>
+    {% endif %}
+  </div>
+
+  <div class="p-1 m-4">
+    <p><h2>Take part in Auction: </h2></p>
+    <form action="{% url 'make a bid' %}" method="POST">
+      {% csrf_token %}
+      <input type="hidden" value="{{title}}" name="title">
+      <input type="number" name="bid_amount">
+      <input type="submit" class="btn btn-outline-primary" value="Make a bid!">
+    </form>
+    {% if not bid_validity %}
+      <p>Sorry, your bid must be grater than the current price of the item.</p>
+    {% endif %}
+  </div>
+
+  <div class="p-1 m-4">
+    <p><h2>Bidding Details:</h2></p>
+    {% if prev_bids %}
+      {% for bid in bids %}
+        <div>
+          <ul>
+            <li>${{bid.amount}} bidded by {{bid.usr.username}}</li>
+          </ul>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div>There are no previous bids be the first bidder!</div>
     {% endif %}
   </div>
   

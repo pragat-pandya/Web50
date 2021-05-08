@@ -12,4 +12,5 @@ urlpatterns = [
     path ("watch", views.watch, name="watch"),
     path ("unwatch", views.unwatch, name="unwatch"),
     path ("watchlist", views.watchlist, name="watchlist"),
+    path ("make-a-bid", views.make_a_bid, name="make a bid"),
 ]
