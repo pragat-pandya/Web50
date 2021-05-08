@@ -71,6 +71,11 @@ def register(request):
 
 def listing_page (request, listing_title):
     obj = Listing.objects.get(title=listing_title)
+    #try:
+    owner = False
+    if request.user == obj.owner:
+        owner = True
+    
     try:
         flag = request.user.watcher.filter(item=obj).exists()
     except AttributeError:
@@ -86,7 +91,9 @@ def listing_page (request, listing_title):
         "initial_bid" : obj.bid_init,
         "bid_validity" : True,
         "prev_bids" : obj.bids.all().exists(), 
-        "bids" :  obj.bids.all()
+        "bids" :  obj.bids.all(),
+        "owner" : owner,
+        "isclosed" : False,
     })
 
 
@@ -172,7 +179,7 @@ def make_a_bid (request):
         # Get the listing object in question of bid
         l = Listing.objects.get(title=request.POST["title"])
         # Check if the bid is valid 
-        if int(request.POST["bid_amount"]) > l.curr_price:
+        if int(request.POST["bid_amount"]) > l.curr_price and l.owner != request.user:
             l.curr_price = int(request.POST["bid_amount"])
             # Make these changes to table row
             l.save()
@@ -183,9 +190,8 @@ def make_a_bid (request):
             b.usr = request.user
             # Save this new bid 
             b.save()
-            flag = request.user.watcher.filter(item=l).exists()
             return render (request, "auctions/listing_page.html", {
-                "flag" : flag,
+                "flag" : request.user.watcher.filter(item=l).exists(),
                 "listing" : l,
                 "title" : l.title,
                 "image" : l.img,
@@ -195,11 +201,12 @@ def make_a_bid (request):
                 "bid_validity" : True,
                 "prev_bids" : l.bids.all().exists(),
                 "bids" : l.bids.all(),
+                "owner" : request.user == l.owner,
+                "isclosed": False,
             })
         else:
-            flag = request.user.watcher.filter(item=l).exists()
             return render (request, "auctions/listing_page.html", {
-                "flag" : flag,
+                "flag" : request.user.watcher.filter(item=l).exists(),
                 "listing" : l,
                 "title" : l.title,
                 "image" : l.img,
@@ -208,5 +215,32 @@ def make_a_bid (request):
                 "initial_bid" : l.bid_init,
                 "bid_validity" : False,
                 "prev_bids" : l.bids.all().exists(),
-                "bids" :  l.bids.all()
+                "bids" :  l.bids.all(),
+                "owner" : request.user == l.owner,
+                "isclosed": False,
+            })
+
+@login_required(login_url='/login', redirect_field_name='index')
+def close (request):
+    if request.method == "POST":
+        # The item which is closing
+        l = Listing.objects.get(title=request.POST["title"])
+        # Winning bid who owned the item
+        winning_bid = Bid.objects.get(item=l,amount=l.curr_price)
+        # The user who made that bid
+        winner = winning_bid.usr
+        return render (request, "auctions/listing_page.html", {
+                "flag" : request.user.watcher.filter(item=l).exists(),
+                "listing" : l,
+                "title" : l.title,
+                "image" : l.img,
+                "price" : l.curr_price,
+                "description" : l.description,
+                "initial_bid" : l.bid_init,
+                "bid_validity" : False,
+                "prev_bids" : l.bids.all().exists(),
+                "bids" :  l.bids.all(),
+                "owner" : request.user == l.owner,
+                "isclosed": True,
+                "winner" : winner,
             })

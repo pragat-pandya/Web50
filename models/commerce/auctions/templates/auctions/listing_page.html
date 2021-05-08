@@ -26,28 +26,32 @@
   {% endif %}
   
   <div class="p-1 m-4" id="curr_price">
-      <h2>Initial Bid: ${{initial_bid}}</h2>
+      <h2>Initial Bid: <div>${{initial_bid}}</div></h2>
   </div>
-
-  
-  <div class="p-1 m-4" id="curr_price">
-    {% if price != None %}
-      <h2>Current Price: ${{price}}</h2>
-    {% else %}
-      <h2>Current Price: ${{initial_bid}}</h2>
-    {% endif %}
+  {% if isclosed %}
+  <div class="p-1 m-4">
+    <h2>The winner of this auctions is:</h2>
+    <h3>{{winner.username}}</h3>
   </div>
-
+  {% else %}
   <div class="p-1 m-4">
     <p><h2>Take part in Auction: </h2></p>
     <form action="{% url 'make a bid' %}" method="POST">
       {% csrf_token %}
       <input type="hidden" value="{{title}}" name="title">
       <input type="number" name="bid_amount">
-      <input type="submit" class="btn btn-outline-primary" value="Make a bid!">
+      <input type="submit" class="ml-3 btn btn-outline-primary" value="Make a bid!">
     </form>
     {% if not bid_validity %}
-      <p>Sorry, your bid must be grater than the current price of the item.</p>
+      <p>Sorry, your bid must be grater than the current price of the item. Also you cannot bid on your own listing.</p>
+    {% endif %}
+  </div>
+  {% endif %}
+  <div class="p-1 m-4" id="curr_price">
+    {% if price != None %}
+      <h2>Current Price: <div>${{price}}</div></h2>
+    {% else %}
+      <h2>Current Price: <div>${{initial_bid}}</div></h2>
     {% endif %}
   </div>
 
@@ -65,12 +69,24 @@
       <div>There are no previous bids be the first bidder!</div>
     {% endif %}
   </div>
-  
-  
 
   <div id="description" class="p-4 mt-4">
     <h2>Description</h2>
     <p>{{description}}</p>
   </div>
+
+  {% if owner %}
+  <div class="p-4 mt-4">
+    {% if isclosed %}
+      <div>This auction is closed by owner ({{listing.owner.username}})</div>
+    {% else %}
+    <form action="{% url 'close auction' %}" method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="title" value="{{title}}">
+      <input type="submit" value="Close the auction!" class="btn btn-outline-danger">
+    </form>
+    {% endif %}
+  </div>
+  {% endif %}
 </div>
 {% endblock %}
