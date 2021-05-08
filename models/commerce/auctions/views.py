@@ -86,6 +86,7 @@ def listing_page (request, listing_title):
         "initial_bid" : obj.bid_init,
         "bid_validity" : True,
         "prev_bids" : obj.bids.all().exists(), 
+        "bids" :  obj.bids.all()
     })
 
 
