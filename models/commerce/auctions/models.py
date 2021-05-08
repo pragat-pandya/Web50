@@ -43,3 +43,8 @@ class Bid (models.Model):
     item = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="bids")
     amount = models.IntegerField(null=False)
     usr =  models.ForeignKey(User, on_delete=models.CASCADE, related_name="bidder")
+
+class Comment (models.Model):
+    id = models.AutoField(primary_key=True)
+    item = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="comments")
+    body = models.TextField(max_length=200, null=False)
