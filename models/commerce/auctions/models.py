@@ -3,6 +3,14 @@ from django.db import models
 
 
 
+class Category (models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.TextField(max_length=100)
+
+    def __str__ (self):
+        return f"{self.name}"
+
+
 class User(AbstractUser):
     # A primary key for user table
     id = models.AutoField(primary_key=True)
@@ -10,7 +18,7 @@ class User(AbstractUser):
 
 class Listing(models.Model):
     # PK
-    id = models.AutoField(primary_key=True, )
+    id = models.AutoField(primary_key=True)
     # Title of the listing
     title = models.CharField(max_length=64, null=False)
     # Text description of the listing
@@ -23,6 +31,8 @@ class Listing(models.Model):
     curr_price = models.IntegerField(blank=True)
     # The user who created/added this listing
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owner")
+    # Category in which the listing belongs to.
+    cat = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="listings", null=True)
 
     def __str__ (self):
         return f"{self.id} : {self.title} : {self.description} : {self.bid_init} : {self.img}"
@@ -50,3 +60,4 @@ class Comment (models.Model):
     item = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="comments")
     body = models.TextField(max_length=200, null=False)
     usr = models.ForeignKey(User, null=False, on_delete=models.CASCADE, related_name="commenter")
+

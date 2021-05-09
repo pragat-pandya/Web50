@@ -36,6 +36,18 @@ def login_view(request):
     else:
         return render(request, "auctions/login.html")
 
+def cats (request):
+    cats = Category.objects.all()
+    return render (request, "auctions/cats.html", {
+        "cats" : cats
+    })
+
+def catlist (request, name):
+    listings = (Category.objects.get(name=name)).listings.all()
+    return render(request, "auctions/index.html", {
+        "message" : list(listings)
+    })
+
 
 def logout_view(request):
     logout(request)
