@@ -89,4 +89,63 @@
   </div>
   {% endif %}
 </div>
+
+<div class="container mt-5">
+  <h2>Comments</h2>
+</div>
+
+
+<!---Comment section-->
+{% if iscomments %}
+<div class="container mt-5">
+  {% for comment in comments %}
+  <div class="d-flex justify-content-center row">
+      <div class="col-md-8">
+          <div class="d-flex flex-column comment-section">
+              <div class="bg-white p-2">
+                  <div class="d-flex flex-row user-info"><img class="rounded-circle" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAgrsY1Zw5553wtz3MX7Tm6FWm-1nGG-pENw&usqp=CAU" width="40">
+                      <div class="d-flex flex-column justify-content-start ml-2"><span class="d-block font-weight-bold name">{{comment.usr.username}}</span></div>
+                  </div>
+                  <div class="mt-2">
+                      <p class="comment-text">{{comment.body}}</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  {% endfor %}
+  <div class="container mt-5">
+    <div class="bg-white">
+      <div class="d-flex flex-row fs-12">
+        <p>Add your comment: </p>
+      </div>
+    </div>
+    <div class="bg-light p-2">
+      <div class="d-flex flex-row align-items-start"><img class="rounded-circle" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAgrsY1Zw5553wtz3MX7Tm6FWm-1nGG-pENw&usqp=CAU" width="40"><textarea class="form-control ml-1 shadow-none textarea" form="cmnt" name="cbody"></textarea></div>
+      <form action="{% url 'add comment' %}" id="cmnt" class="form" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="item-name" value="{{title}}">
+        <div class="mt-2 text-right"><button class="btn btn-success btn-sm shadow-none" type="submit" form="cmnt" formaction="{% url 'add comment' %}" formmethod="POST">Post comment</button></div>
+      </form>      
+    </div>
+  </div>
+</div>
+
+{% else %}
+<div class="container mt-5">
+  <div class="bg-white">
+    <div class="d-flex flex-row fs-12">
+      <p>Add your comment: </p>
+    </div>
+  </div>
+  <div class="bg-light p-2">
+    <div class="d-flex flex-row align-items-start"><img class="rounded-circle" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAgrsY1Zw5553wtz3MX7Tm6FWm-1nGG-pENw&usqp=CAU" width="40"><textarea class="form-control ml-1 shadow-none textarea" form="cmnt" name="cbody"></textarea></div>
+    <form action="{% url 'add comment' %}" id="cmnt" class="form" method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="item-name" value="{{title}}">
+      <div class="mt-2 text-right"><button class="btn btn-success btn-sm shadow-none" type="submit" form="cmnt" formaction="{% url 'add comment' %}" formmethod="POST">Post comment</button></div>
+    </form>      
+  </div>
+</div>
+{% endif %}
 {% endblock %}

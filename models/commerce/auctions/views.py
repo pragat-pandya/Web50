@@ -94,6 +94,8 @@ def listing_page (request, listing_title):
         "bids" :  obj.bids.all(),
         "owner" : owner,
         "isclosed" : False,
+        "iscomments" : Comment.objects.filter(item = obj).exists(),
+        "comments" : Comment.objects.filter(item=obj),
     })
 
 
@@ -203,6 +205,8 @@ def make_a_bid (request):
                 "bids" : l.bids.all(),
                 "owner" : request.user == l.owner,
                 "isclosed": False,
+                "iscomments" : Comment.objects.filter(item = obj).exists(),
+                "comments" : Comment.objects.filter(item=obj),
             })
         else:
             return render (request, "auctions/listing_page.html", {
@@ -218,6 +222,8 @@ def make_a_bid (request):
                 "bids" :  l.bids.all(),
                 "owner" : request.user == l.owner,
                 "isclosed": False,
+                "iscomments" : Comment.objects.filter(item = obj).exists(),
+                "comments" : Comment.objects.filter(item=obj),
             })
 
 @login_required(login_url='/login', redirect_field_name='index')
@@ -243,4 +249,16 @@ def close (request):
                 "owner" : request.user == l.owner,
                 "isclosed": True,
                 "winner" : winner,
-            })
+                "iscomments" : Comment.objects.filter(item = obj).exists(),
+                "comments" : Comment.objects.filter(item=obj),
+            })  
+
+@login_required(login_url='/login', redirect_field_name='index')
+def add_comment(request):
+    if request.method == "POST":
+        c = Comment()
+        c.body = request.POST["cbody"]
+        c.item = Listing.objects.get(title=request.POST.get('item-name'))
+        c.usr = request.user
+        c.save()    
+        return HttpResponseRedirect(reverse("listing_page", kwargs={'listing_title': request.POST.get('item-name')}))
