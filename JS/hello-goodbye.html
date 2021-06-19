@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-18">
+        <meta name="viewport" content="wdith=device-width, initial-scale=1.0">
+        <title>Hello-Goodbye</title>
+        <script>
+            function hello () {
+                const heading = document.querySelector('h1');
+                if (heading.innerHTML === "Hello!") {
+                    heading.innerHTML = "Goodbye!";
+                }
+                else {
+                    heading.innerHTML = "Hello!";
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Hello!</h1>
+        <button onclick="hello()">Change</button>
+    </body>
+</html>
