@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Slider</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+        .container {
+            width: 80%;
+            margin: 10px auto;
+        }
+        .coursel {
+            border: 2px solid #181818;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+        .slider {
+            height: 100%;
+            display: flex;
+            width: 1000%;
+            border: 2px solid red;
+            transition: all 0.3s;
+        }
+        .slider section {
+            flex-basis: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .controls .arrow {
+            position: absolute;
+            top: 50%;
+            cursor: pointer;
+            transform: translateY(-50%);
+        }
+        .arrow.left {
+            left: 10px;
+        }
+        .arrow.right {
+            right: 10px;
+        }
+        .controls ul {
+            position: absolute;
+            bottom: 20%;
+            left: 50%;
+            transform: translate(-50%);
+            list-style: none;
+            display: flex;
+            padding: 0;
+            margin: 0;
+        }
+        .controls ul li {
+            width: 14px;
+            height: 14px;
+            border: 2px solid black;
+            border-radius: 50px;
+            margin: 10px;
+            background: black;
+            cursor: pointer;
+        }
+        .controls ul li.selected {
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="coursel">
+            <div class="slider">
+                <section>Content for section 1</section>
+                <section>Content for section 2</section>
+                <section>Content for section 3</section>
+                <section>Content for section 4</section>
+                <section>Content for section 5</section>
+                <section>Content for section 6</section>
+                <section>Content for section 7</section>
+                <section>Content for section 8</section>
+                <section>Content for section 9</section>
+                <section>Content for section 10</section>
+            </div>
+            <div class="controls">
+                <span class="left arrow"><span class="material-icons">
+                    arrow_back_ios
+                    </span></span>
+                <span class="right arrow"><span class="material-icons">
+                    arrow_forward_ios
+                    </span></span>
+                <ul>
+                    <li class="selected"></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        const slider = document.querySelector('.slider');
+        const leftArrow = document.querySelector('.left');
+        const rightArrow = document.querySelector('.right');
+        var sectionIndex = 0;
+        const indicatorParent = document.querySelector('.controls ul');
+
+        function setIndex () {
+            document.querySelector('.controls .selected').classList.remove('selected');
+            slider.style.transform = 'translate('+(sectionIndex)*-10+'%)';    
+        }
+
+        document.querySelectorAll('.controls li').forEach(function (indicator, ind) {
+            indicator.addEventListener('click', function () {
+                sectionIndex = ind;
+                //document.querySelector('.controls .selected').classList.remove('selected');
+                setIndex();
+                indicator.classList.add('selected');
+                //slider.style.transform = 'translate('+(sectionIndex)*-10+'%)';    
+            });
+        });
+        rightArrow.addEventListener('click', function () {
+            sectionIndex = (sectionIndex < 9) ? sectionIndex + 1 : 9;
+            //document.querySelector('.controls .selected').classList.remove('selected');
+            setIndex();
+            indicatorParent.children[sectionIndex].classList.add('selected');
+            //slider.style.transform = 'translate('+(sectionIndex)*-10+'%)';
+        });
+        leftArrow.addEventListener('click', function() {
+            sectionIndex = (sectionIndex > 0) ? sectionIndex - 1 : 0;
+            //document.querySelector('.controls .selected').classList.remove('selected');
+            setIndex();
+            indicatorParent.children[sectionIndex].classList.add('selected');
+            //slider.style.transform = 'translate('+(sectionIndex)*-10+'%)';
+        });       
+    </script>
+
+</body>
+</html>
